@@ -9,13 +9,14 @@ jobs:
         Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
         Expand-Archive ngrok.zip
         ./ngrok/ngrok.exe authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
-        Start-Process ./ngrok/ngrok.exe -ArgumentList "tcp --region jp 3389"
-        echo "正在等候 IP 產生..."
-        sleep 30
+        Start-Process ./ngrok/ngrok.exe -ArgumentList "tcp --region ap 3389"
+        echo "正在等候系統初始化 (預計 45 秒)..."
+        sleep 45
         $tunnels = Invoke-RestMethod http://localhost:4040/api/tunnels
         $publicUrl = $tunnels.tunnels[0].public_url
         Write-Host "================================"
         Write-Host "你的連線地址: $publicUrl"
         Write-Host "使用者帳號: Administrator"
         Write-Host "================================"
+        Write-Host "連線成功後，這台電腦會維持開啟 6 小時。"
         sleep 21600
