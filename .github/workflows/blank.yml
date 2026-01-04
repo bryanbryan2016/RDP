@@ -4,19 +4,14 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: 啟動電腦並抓取IP
+    - name: 啟動電腦並保持開啟
       run: |
         Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
         Expand-Archive ngrok.zip
         ./ngrok/ngrok.exe authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
         Start-Process ./ngrok/ngrok.exe -ArgumentList "tcp --region ap 3389"
-        echo "正在等候 IP 產生 (約 45 秒)..."
-        sleep 45
-        $tunnels = Invoke-RestMethod http://localhost:4040/api/tunnels
-        $publicUrl = $tunnels.tunnels[0].public_url
         Write-Host "================================"
-        Write-Host "你的 IP 地址: $publicUrl"
-        Write-Host "使用者: Administrator"
+        Write-Host "正在啟動...請去 Ngrok 官網拿 IP"
+        Write-Host "網址: https://dashboard.ngrok.com/tunnels/endpoints"
         Write-Host "================================"
-        Write-Host "只要網頁還在轉圈圈，就代表電腦開著！"
         sleep 21600
